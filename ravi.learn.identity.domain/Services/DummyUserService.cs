@@ -20,6 +20,16 @@ namespace ravi.learn.identity.domain.Services
             }
         }
 
+        public Task<bool> AddUser(string userName, string password)
+        {
+            if (_users.ContainsKey(userName.ToLower()))
+            {
+                return Task.FromResult(false);
+            }
+            _users.Add(userName.ToLower(), (BCrypt.Net.BCrypt.HashPassword(password), new User(userName)));
+            return Task.FromResult(true);
+        }
+
         public Task<bool> ValidateCredentials(string userName, string password, out User user)
         {
             user = null;

@@ -47,7 +47,29 @@ namespace ravi.learn.identity.web.Controllers
             }
             return View(signInModel);
         }
+        
+        [Route("signup")]        
+        public  IActionResult SignUp()
+        {
+            return View(new SignUpModel());
+        }
 
+        [Route("signup")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SignUp(SignUpModel signUpModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (await _userService.AddUser(signUpModel.UserName, signUpModel.Password))
+                {
+                    await SignInUser(signUpModel.UserName);
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError("Error", "Username exists. Please choose another one");
+            }
+            return View(signUpModel);
+        }
 
         [Route("signout")]
         [HttpPost]

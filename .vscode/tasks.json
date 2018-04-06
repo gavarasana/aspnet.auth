@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/ravi.learn.identity.web/ravi.learn.identity.web.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

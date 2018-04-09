@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Rewrite;
 using ravi.learn.identity.domain.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace ravi.learn.identity.web
 {
@@ -31,8 +32,12 @@ namespace ravi.learn.identity.web
             });
 
             var users = new Dictionary<string, string> { { "jsmith", "p@ssw0rd" }, { "lsmith", "password" } };
-
             services.AddSingleton<IUserService>(new DummyUserService(users));
+
+            /*  
+            
+
+            
 
             services.AddAuthentication(options =>
             {
@@ -45,6 +50,29 @@ namespace ravi.learn.identity.web
                     options.LoginPath = "/auth/signin";
 
                 });
+            */
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddGoogle(options =>
+            {
+                options.ClientId = "59243158722-ickm3e2l4fioq07hinq04ikncqk5pabg.apps.googleusercontent.com";
+                options.ClientSecret = "Qk2oJ8K-Z8dvR3vkBMCfUVnY";
+                      
+            })
+            .AddTwitter(options => 
+            {
+                options.ConsumerKey = "RSFDSd";
+                options.ConsumerSecret = "sdsdfsdfsdf";
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/auth/signin";
+            });                   
 
 
         }
@@ -64,6 +92,8 @@ namespace ravi.learn.identity.web
             app.UseRewriter((new RewriteOptions()).AddRedirectToHttps(301, 44306));
 
             app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

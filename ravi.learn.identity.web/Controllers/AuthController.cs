@@ -23,9 +23,18 @@ namespace ravi.learn.identity.web.Controllers
         [Route("signin")]
         public IActionResult SignIn()
         {
-            return View(new SignInModel());
+            //return View(new SignInModel());
+            //return Challenge(new AuthenticationProperties { RedirectUri = "/" });
+            return View();
         }
 
+        [Route("signin/{provider}")]
+        public IActionResult SignIn(string provider, string returnUrl = null)
+        {
+            return Challenge(new AuthenticationProperties { RedirectUri = returnUrl ?? "/" }, provider);
+        }
+
+        /* First chapter
         [Route("signin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -47,7 +56,8 @@ namespace ravi.learn.identity.web.Controllers
             }
             return View(signInModel);
         }
-        
+        */
+
         [Route("signup")]        
         public  IActionResult SignUp()
         {
